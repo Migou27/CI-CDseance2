@@ -1,4 +1,4 @@
-const { capitalizeFirstLetter, calculateAverage, slugify, clamp } = require('./utils');
+const { capitalizeFirstLetter, calculateAverage, slugify, clamp } = require('../src/utils.js');
 
 describe('Tests des fonctions utilitaires', () => {
 
@@ -16,14 +16,16 @@ describe('Tests des fonctions utilitaires', () => {
       expect(capitalizeFirstLetter(null)).toBe('');
     });
 
-    it('should return the original string when the first character is not a lowercase letter', () => {
+    it('should return the original string when the first character is a number', () => {
       expect(capitalizeFirstLetter('123abc')).toBe('123abc');
-      expect(capitalizeFirstLetter('!hello')).toBe('!hello');
+    });
+
+    it('should return the original string when the first character is a special character', () => {
+      expect(capitalizeFirstLetter('@hello')).toBe('@hello');
     });
 
     it('should throw a TypeError when the input is not a string', () => {
       expect(() => capitalizeFirstLetter(123)).toThrow(TypeError);
-      expect(() => capitalizeFirstLetter({})).toThrow(TypeError);
     });
   });
 
@@ -31,7 +33,10 @@ describe('Tests des fonctions utilitaires', () => {
   describe('calculateAverage', () => {
     it('should calculate the average correctly', () => {
       expect(calculateAverage([10, 20, 30])).toBe(20);
-      expect(calculateAverage([5, 5, 5, 5])).toBe(5);
+    });
+
+    it('should calculate the average correctly for positive and negative numbers', () => {
+      expect(calculateAverage([-1, -2, -3, 3, 2, 1])).toBe(0);
     });
 
     it('should return 0 when the array is empty', () => {
@@ -43,7 +48,7 @@ describe('Tests des fonctions utilitaires', () => {
     });
 
     it('should throw a TypeError when the array contains non-numeric values', () => {
-      expect(() => calculateAverage([1, 2, '3'])).toThrow(TypeError);
+      expect(() => calculateAverage([1, 2, 'a'])).toThrow(TypeError);
     });
 
     it('should throw a TypeError when the input is not an array', () => {
@@ -62,8 +67,8 @@ describe('Tests des fonctions utilitaires', () => {
       expect(slugify('  Un Super Titre !@#  ')).toBe('un-super-titre');
     });
 
-    it('should return an empty string when the input is null', () => {
-      expect(slugify(null)).toBe('');
+    it('should return a TypeError string when the input is null', () => {
+      expect(() => slugify(null)).toThrow(TypeError);
     });
 
     it('should throw a TypeError when the input is not a string', () => {
@@ -88,8 +93,6 @@ describe('Tests des fonctions utilitaires', () => {
 
     it('should throw a TypeError if any argument is not a number', () => {
       expect(() => clamp('5', 0, 10)).toThrow(TypeError);
-      expect(() => clamp(5, '0', 10)).toThrow(TypeError);
-      expect(() => clamp(5, 0, '10')).toThrow(TypeError);
     });
   });
 

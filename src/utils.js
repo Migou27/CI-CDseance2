@@ -9,11 +9,13 @@ function capitalizeFirstLetter(string) {
 }
 
 function calculateAverage(arr) {
+  if (arr === null) return 0;
   if (!Array.isArray(arr)) {
     throw new TypeError("Input must be an array");
   }
-  if (arr.length === 0 || arr === null) return 0;
-  if (arr.some(isNaN)) {
+  if (arr.length === 0) return 0;
+  const allNumbers = arr.every(val => typeof val === 'number' && !isNaN(val));
+  if (!allNumbers) {
     throw new TypeError("All elements in the array must be numbers");
   }
   const sum = arr.reduce((acc, val) => acc + val, 0);
@@ -24,14 +26,15 @@ function slugify(string) {
   if (typeof string !== "string") {
     throw new TypeError("Input must be a string");
   }
-  if (string === null) return "";
+
   return string
-    .toString()
     .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
     .trim()
-    .replace(/\s+/g, "-")
-    .replace(/[^\w\-]+/g, "")
-    .replace(/\-\-+/g, "-");
+    .replace(/[^\w\s-]/g, "")
+    .replace(/[\s_-]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 }
 
 function clamp(value, min, max) {
