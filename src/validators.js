@@ -67,6 +67,4 @@ function sortStudents(students, sortBy = "name", order = "asc") {
   return sortedArray;
 }
 
-module.exports = { sortStudents };
-
 module.exports = { isValidEmail, isValidPassword, isValidAge, sortStudents };
