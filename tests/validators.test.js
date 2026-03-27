@@ -1,4 +1,4 @@
-const { isValidEmail, isValidPassword, isValidAge } = require('../src/validators');
+const { isValidEmail, isValidPassword, isValidAge, sortStudents } = require('../src/validators');
 
 describe('Tests des validateurs', () => {
 
@@ -116,6 +116,94 @@ describe('Tests des validateurs', () => {
      it('should throw TypeError for non-integer number', () => {
       expect(() => isValidAge(25.5)).toThrow(TypeError);
      });
+
+  });
+
+  describe('sortStudents', () => {
+
+    const initialStudents = [
+      { id: 1, name: 'Yishuan', grade: 20, age: 20},
+      { id: 2, name: 'Manato', grade: 6, age: 25},
+      { id: 3, name: 'Yihdari', grade: 12, age: 30},
+      { id: 4, name: 'Banyue', grade: 19, age: 22},
+    ];
+
+    it('should sort students by grade ascending', () => {
+      expect(sortStudents(initialStudents, 'grade', 'asc')).toEqual([
+        { id: 2, name: 'Manato', grade: 6, age: 25},
+        { id: 3, name: 'Yihdari', grade: 12, age: 30},
+        { id: 4, name: 'Banyue', grade: 19, age: 22},
+        { id: 1, name: 'Yishuan', grade: 20, age: 20},
+      ]);
+    });
+
+    it('should sort students by grade descending', () => {
+      expect(sortStudents(initialStudents, 'grade', 'desc')).toEqual([
+        { id: 1, name: 'Yishuan', grade: 20, age: 20},
+        { id: 4, name: 'Banyue', grade: 19, age: 22},
+        { id: 3, name: 'Yihdari', grade: 12, age: 30},
+        { id: 2, name: 'Manato', grade: 6, age: 25},
+      ]);
+    });
+
+    it ('should sort students by name ascending', () => {
+      expect(sortStudents(initialStudents, 'name', 'asc')).toEqual([
+        { id: 4, name: 'Banyue', grade: 19, age: 22},
+        { id: 2, name: 'Manato', grade: 6, age: 25},
+        { id: 3, name: 'Yihdari', grade: 12, age: 30},
+        { id: 1, name: 'Yishuan', grade: 20, age: 20},
+      ]);
+    });
+
+    it ('should sort students by name descending', () => {
+      expect(sortStudents(initialStudents, 'name', 'desc')).toEqual([
+        { id: 1, name: 'Yishuan', grade: 20, age: 20},
+        { id: 3, name: 'Yihdari', grade: 12, age: 30},
+        { id: 2, name: 'Manato', grade: 6, age: 25},
+        { id: 4, name: 'Banyue', grade: 19, age: 22},
+      ]);
+    });
+
+     it ('should sort students by age ascending', () => {
+      expect(sortStudents(initialStudents, 'age', 'asc')).toEqual([
+        { id: 1, name: 'Yishuan', grade: 20, age: 20},
+        { id: 4, name: 'Banyue', grade: 19, age: 22},
+        { id: 2, name: 'Manato', grade: 6, age: 25},
+        { id: 3, name: 'Yihdari', grade: 12, age: 30},
+      ]);
+    });
+
+    it ('should sort students by age descending', () => {
+      expect(sortStudents(initialStudents, 'age', 'desc')).toEqual([
+        { id: 3, name: 'Yihdari', grade: 12, age: 30},
+        { id: 2, name: 'Manato', grade: 6, age: 25},
+        { id: 4, name: 'Banyue', grade: 19, age: 22},
+        { id: 1, name: 'Yishuan', grade: 20, age: 20},
+      ]);
+    });
+
+    it ('should return a TypeError when students is not an array', () => {
+      expect(() => sortStudents("not an array", 'grade', 'asc')).toThrow(TypeError);
+    });
+
+    it ('should return a TypeError when students is not an array', () => {
+      expect(() => sortStudents(null, 'grade', 'asc')).toThrow(TypeError);
+    });
+
+    it ('should not modify the original students array', () => {
+      const studentsCopy = JSON.parse(JSON.stringify(initialStudents));
+      sortStudents(initialStudents, 'grade', 'asc');
+      expect(initialStudents).toEqual(studentsCopy);
+    });
+
+    it ('should default to sorting by name ascending if sortBy is not provided', () => {
+      expect(sortStudents(initialStudents)).toEqual([
+        { id: 4, name: 'Banyue', grade: 19, age: 22},
+        { id: 2, name: 'Manato', grade: 6, age: 25},
+        { id: 3, name: 'Yihdari', grade: 12, age: 30},
+        { id: 1, name: 'Yishuan', grade: 20, age: 20},
+      ]);
+    });
 
   });
 

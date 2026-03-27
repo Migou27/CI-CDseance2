@@ -35,6 +35,38 @@ function isValidAge(age) {
   }
 
   return bool;
-} 
+}
 
-module.exports = { isValidEmail, isValidPassword, isValidAge };
+
+function sortStudents(students, sortBy = "name", order = "asc") {
+  // On utilise "throw new" au lieu de "return"
+  if (!Array.isArray(students)) throw new TypeError("Students must be an array");
+  
+  if (students.length === 0) throw new TypeError("Students array cannot be empty");
+  
+  if (sortBy !== "name" && sortBy !== "age" && sortBy !== "grade") {
+    throw new TypeError("sortBy must be either 'name', 'age' or 'grade'");
+  }
+
+  const sortedArray = [...students];
+
+  sortedArray.sort((a, b) => {
+    let valA = a[sortBy];
+    let valB = b[sortBy];
+
+    let comparison = 0;
+    if (typeof valA === 'string' && typeof valB === 'string') {
+      comparison = valA.localeCompare(valB);
+    } else {
+      comparison = valA - valB;
+    }
+
+    return order === "desc" ? comparison * -1 : comparison;
+  });
+
+  return sortedArray;
+}
+
+module.exports = { sortStudents };
+
+module.exports = { isValidEmail, isValidPassword, isValidAge, sortStudents };
