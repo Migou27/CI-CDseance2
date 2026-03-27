@@ -1,0 +1,30 @@
+{
+  "name": "ci-cdseance2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Migou27/CI-CDseance2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Migou27/CI-CDseance2/issues"
+  },
+  "homepage": "https://github.com/Migou27/CI-CDseance2#readme",
+  "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "eslint": "^9.39.4",
+    "globals": "^17.4.0",
+    "jest": "^29.7.0",
+    "supertest": "^7.2.2"
+  }
+}
