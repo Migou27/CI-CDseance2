@@ -17,7 +17,7 @@ module.exports = [
     "code": "HELLO10",
     "type": "fixed",
     "value": 10.00,
-    "minOrder": 30.00,
+    "minOrder": 20.00,
     "expiresAt": "2026-06-15"
   },
   {
