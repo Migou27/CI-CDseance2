@@ -62,4 +62,41 @@ function applyPromoCode(subtotal, promoCode) {
   return Math.max(0, Number(discountedTotal.toFixed(2)));
 }
 
-module.exports = { deliveryFee, applyPromoCode };
+function calculateSurge(hour, dayOfWeek) {
+  if (typeof hour !== 'number' || typeof dayOfWeek !== 'number') {
+    throw new TypeError("hour and dayOfWeek must be numbers");
+  }
+  if (dayOfWeek < 0 || dayOfWeek > 6) {
+    throw new RangeError("dayOfWeek must be between 0 (Sunday) and 6 (Saturday)");
+  }
+
+  if (hour < 10 || hour >= 22) {
+    return 0; // Fermé
+  }
+
+  if (dayOfWeek === 0) {
+    return 1.2;
+  }
+
+  if (dayOfWeek === 5 || dayOfWeek === 6) {
+    if (hour >= 19 && hour < 22) {
+      return 1.8;
+    }
+    return 1.0;
+  }
+
+  if (dayOfWeek >= 1 && dayOfWeek <= 4) {
+    if (hour >= 12 && hour < 13.5) {
+      return 1.3;
+    }
+    if (hour >= 19 && hour < 21) {
+      return 1.5;
+    }
+    return 1.0;
+  }
+
+  return 1.0;
+}
+
+module.exports = { calculateSurge };
+module.exports = { deliveryFee, applyPromoCode, calculateSurge };

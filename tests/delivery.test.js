@@ -1,4 +1,4 @@
-const { deliveryFee, applyPromoCode } = require('../src/delivery');
+const { deliveryFee, applyPromoCode, calculateSurge } = require('../src/delivery');
 
 describe('Tests de la fonction deliveryFee', () => {
 
@@ -88,4 +88,52 @@ describe('Tests de la fonction applyPromoCode', () => {
     expect(() => applyPromoCode(100, null)).toThrow(TypeError);
   });
 
+});
+
+describe('calculateSurge', () => {
+  
+  describe('🟢 Cas nominaux (Chaque multiplicateur)', () => {
+    it('Mardi 15h → 1.0 (normal)', () => {
+      expect(calculateSurge(15.0, 2)).toBe(1.0);
+    });
+
+    it('Mercredi 12h30 → 1.3 (déjeuner)', () => {
+      expect(calculateSurge(12.5, 3)).toBe(1.3);
+    });
+
+    it('Jeudi 20h → 1.5 (dîner)', () => {
+      expect(calculateSurge(20.0, 4)).toBe(1.5);
+    });
+
+    it('Vendredi 21h → 1.8 (weekend soir)', () => {
+      expect(calculateSurge(21.0, 5)).toBe(1.8);
+    });
+
+    it('Dimanche 14h → 1.2 (dimanche entier)', () => {
+      expect(calculateSurge(14.0, 0)).toBe(1.2);
+    });
+  });
+
+  describe('🟡 Transitions et limites', () => {
+    it('11h30 pile (Lundi) → normal, le déjeuner ne commence qu\'à 12h', () => {
+      expect(calculateSurge(11.5, 1)).toBe(1.0);
+    });
+
+    it('19h00 pile (Lundi) → début du dîner', () => {
+      expect(calculateSurge(19.0, 1)).toBe(1.5);
+    });
+
+    it('22h00 pile → fermé (retourne 0)', () => {
+      expect(calculateSurge(22.0, 3)).toBe(0);
+    });
+
+    it('9h59 (environ) → fermé car avant 10h', () => {
+      // 9h59 = 9 + (59/60) = ~9.983
+      expect(calculateSurge(9.98, 4)).toBe(0);
+    });
+
+    it('10h00 pile → ouverture normale', () => {
+      expect(calculateSurge(10.0, 4)).toBe(1.0);
+    });
+  });
 });
