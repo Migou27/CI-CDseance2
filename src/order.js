@@ -14,36 +14,23 @@ function calculateOrderTotal(items, distance, weight, promoCode, hour, dayOfWeek
     subtotal += item.price * item.quantity;
   }
 
-  let surge;
-  try {
-    surge = calculateSurge(hour, dayOfWeek);
-  } catch (error) {
-    throw error; 
-  }
+  // L'erreur remontera toute seule si calculateSurge plante
+  const surge = calculateSurge(hour, dayOfWeek);
 
   if (surge === 0) {
     throw new Error("Le restaurant est actuellement fermé");
   }
 
-  let baseDeliveryFee;
-  try {
-    baseDeliveryFee = deliveryFee(distance, weight);
-  } catch (error) {
-    throw error; 
-  }
+  // L'erreur remontera toute seule si deliveryFee plante
+  const baseDeliveryFee = deliveryFee(distance, weight);
 
   let discountedSubtotal = subtotal;
   let discount = 0;
 
   if (promoCode) {
-    try {
-      discountedSubtotal = applyPromoCode(subtotal, promoCode);
-      
-      discount = subtotal - discountedSubtotal;
-
-    } catch (error) {
-      throw error;
-    }
+    // L'erreur remontera toute seule si applyPromoCode plante
+    discountedSubtotal = applyPromoCode(subtotal, promoCode);
+    discount = subtotal - discountedSubtotal;
   }
 
   const finalDeliveryFee = baseDeliveryFee * surge; 

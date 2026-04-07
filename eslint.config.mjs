@@ -12,6 +12,18 @@ export default defineConfig([
         ...globals.node,
         ...globals.jest
       } 
+    },
+    rules: {
+      "no-unused-vars": ["error", { 
+        "argsIgnorePattern": "^_", 
+        "varsIgnorePattern": "^_"
+      }],
+
+      "no-unreachable": "error",
+
+      "no-use-before-define": "error",
+
+      "no-console": ["warn", { allow: ["warn", "error"] }]
     } 
   },
 ]);
