@@ -1,6 +1,7 @@
 // app.js
 const express = require('express');
-const { calculateOrderTotal, applyPromoCode } = require('src/delivery');
+const { applyPromoCode } = require('./src/delivery');
+const { calculateOrderTotal } = require('./src/order');
 
 const app = express();
 app.use(express.json());
