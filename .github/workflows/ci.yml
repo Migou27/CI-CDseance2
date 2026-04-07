@@ -1,0 +1,37 @@
+name: CI Pipeline
+
+# Le pipeline se lance à chaque push et à chaque pull request sur la branche main (ou master)
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  lint-and-test:
+    name: Lint & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. On récupère le code de ton dépôt
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      # 2. On installe l'environnement Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Utilise une version récente et stable de Node
+          cache: 'npm'       # Accélère les futurs lancements en gardant le cache
+
+      # 3. Installation propre des dépendances (npm ci est plus strict que npm install)
+      - name: Installation des dépendances
+        run: npm ci
+
+      # 4. Étape de Lint (Échouera si le code est "sale")
+      - name: Vérification du code (ESLint)
+        run: npm run lint
+
+      # 5. Étape de Tests (Échouera si un test casse OU si la couverture < 80%)
+      - name: Tests unitaires & intégration (Jest + Coverage)
+        run: npm test
