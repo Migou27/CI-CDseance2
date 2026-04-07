@@ -40,5 +40,11 @@ module.exports = [
     "value": 15,
     "minOrder": 0.00,
     "expiresAt": "2026-12-31"
+  },
+  { "code": "INVALIDTYPE", 
+    "type": "unknown", 
+    "value": 10, 
+    "minOrder": 50, 
+    "expiresAt": "2028-12-31" 
   }
 ]

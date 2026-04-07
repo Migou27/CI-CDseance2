@@ -186,8 +186,8 @@ describe('Tests des validateurs', () => {
       expect(() => sortStudents("not an array", 'grade', 'asc')).toThrow(TypeError);
     });
 
-    it ('should return a TypeError when students is not an array', () => {
-      expect(() => sortStudents(null, 'grade', 'asc')).toThrow(TypeError);
+    it ('should return a TypeError when students is empty', () => {
+      expect(() => sortStudents([], 'grade', 'asc')).toThrow(TypeError);
     });
 
     it ('should not modify the original students array', () => {

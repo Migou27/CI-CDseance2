@@ -26,6 +26,25 @@ describe('calculateOrderTotal', () => {
       expect(() => calculateOrderTotal(baseItems, 5, 2, null, 23.0, 2))
         .toThrow("Le restaurant est actuellement fermé");
     });
+
+    it('should throw an error if an item has negative price', () => {
+      const invalidItems = [{ name: "Burger", price: -5.00, quantity: 1 }];
+      expect(() => calculateOrderTotal(invalidItems, 5, 2, null, 15.0, 2))
+        .toThrow("Le prix d'un article ne peut pas être négatif");
+    });
+
+    it('should throw an error if an item has zero quantity', () => {
+      const invalidItems = [{ name: "Fries", price: 3.00, quantity: 0 }];
+      expect(() => calculateOrderTotal(invalidItems, 5, 2, null, 15.0, 2))
+        .toThrow("La quantité d'un article doit être supérieure à 0");
+    });
+
+    it('should throw an error if an item has negative quantity', () => {
+      const invalidItems = [{ name: "Soda", price: 2.00, quantity: -1 }];
+      expect(() => calculateOrderTotal(invalidItems, 5, 2, null, 15.0, 2))
+        .toThrow("La quantité d'un article doit être supérieure à 0");
+    });
+
   });
 
   describe('Propagation des erreurs des sous-fonctions', () => {

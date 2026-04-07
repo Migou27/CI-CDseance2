@@ -44,6 +44,10 @@ describe('Tests de la fonction deliveryFee', () => {
 
 describe('Tests de la fonction applyPromoCode', () => {
 
+  it('should throw a Error for unsupported promo code type', () => {
+    expect(() => applyPromoCode(100, "INVALIDTYPE")).toThrow(Error);
+  });
+
   it('should return correct price when applying a %tage reduction', () => {
     expect(applyPromoCode(100, "BIENVENUE20")).toBe(80);
   });
@@ -92,48 +96,62 @@ describe('Tests de la fonction applyPromoCode', () => {
 
 describe('calculateSurge', () => {
   
-  describe('🟢 Cas nominaux (Chaque multiplicateur)', () => {
-    it('Mardi 15h → 1.0 (normal)', () => {
+  describe('Nominal Cases', () => {
+    it('should return 1.0 on a Tuesday at 15:00', () => {
       expect(calculateSurge(15.0, 2)).toBe(1.0);
     });
 
-    it('Mercredi 12h30 → 1.3 (déjeuner)', () => {
+    it('should return 1.0 on a Friday at 14:00', () => {
+      expect(calculateSurge(14.0, 5)).toBe(1.0);
+    });
+
+    it('should return 1.0 on a Saturday at 16:00', () => {
+      expect(calculateSurge(16.0, 6)).toBe(1.0);
+    });
+
+    it('should return 1.3 on a Wednesday at 12:30', () => {
       expect(calculateSurge(12.5, 3)).toBe(1.3);
     });
 
-    it('Jeudi 20h → 1.5 (dîner)', () => {
+    it('should return 1.5 on a Thursday at 20:00', () => {
       expect(calculateSurge(20.0, 4)).toBe(1.5);
     });
 
-    it('Vendredi 21h → 1.8 (weekend soir)', () => {
+    it('should return 1.8 on a Friday at 21:00', () => {
       expect(calculateSurge(21.0, 5)).toBe(1.8);
     });
 
-    it('Dimanche 14h → 1.2 (dimanche entier)', () => {
+    it('should return 1.2 on a Sunday at 14:00', () => {
       expect(calculateSurge(14.0, 0)).toBe(1.2);
     });
   });
 
-  describe('🟡 Transitions et limites', () => {
-    it('11h30 pile (Lundi) → normal, le déjeuner ne commence qu\'à 12h', () => {
+  describe('Transitions and Edge Cases', () => {
+    it('should return 1.0 at exactly 11:30 on a Monday', () => {
       expect(calculateSurge(11.5, 1)).toBe(1.0);
     });
 
-    it('19h00 pile (Lundi) → début du dîner', () => {
+    it('should return 1.5 at exactly 19:00 on a Monday', () => {
       expect(calculateSurge(19.0, 1)).toBe(1.5);
     });
 
-    it('22h00 pile → fermé (retourne 0)', () => {
+    it('should return 0 at exactly 22:00', () => {
       expect(calculateSurge(22.0, 3)).toBe(0);
     });
 
-    it('9h59 (environ) → fermé car avant 10h', () => {
-      // 9h59 = 9 + (59/60) = ~9.983
+    it('should return 0 at 09:59', () => {
+      // 9:59 = 9 + (59/60) = ~9.983
       expect(calculateSurge(9.98, 4)).toBe(0);
     });
 
-    it('10h00 pile → ouverture normale', () => {
+    it('should return 1.0 at exactly 10:00 (opening time)', () => {
       expect(calculateSurge(10.0, 4)).toBe(1.0);
+    });
+  });
+
+  describe('Error Handling', () => {
+    it('should throw a RangeError when dayOfWeek is outside the 0-6 range', () => {
+      expect(() => calculateSurge(15.0, 7)).toThrow(RangeError);
     });
   });
 });

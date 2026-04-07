@@ -50,12 +50,14 @@ function applyPromoCode(subtotal, promoCode) {
     throw new Error(`Promo code '${activePromo.code}' has expired`);
   }
 
+  console.log('Hello');
   let discountedTotal;
   if (activePromo.type === 'percentage') {
     discountedTotal = subtotal - (subtotal * activePromo.value / 100);
   } else if (activePromo.type === 'fixed') {
     discountedTotal = subtotal - activePromo.value;
   } else {
+    console.log(`Unsupported promo code type '${activePromo.type}' for code '${activePromo.code}'`);
     throw new Error(`Promo code '${activePromo.code}' has unsupported type '${activePromo.type}'`);
   }
 
@@ -95,7 +97,7 @@ function calculateSurge(hour, dayOfWeek) {
     return 1.0;
   }
 
-  return 1.0;
+  //return 1.0;
 }
 
 module.exports = { calculateSurge };

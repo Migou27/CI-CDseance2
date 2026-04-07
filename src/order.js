@@ -41,10 +41,6 @@ function calculateOrderTotal(items, distance, weight, promoCode, hour, dayOfWeek
       
       discount = subtotal - discountedSubtotal;
 
-      if (discount < 0) {
-        discount = 0;
-        discountedSubtotal = subtotal;
-      }
     } catch (error) {
       throw error;
     }

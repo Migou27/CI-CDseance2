@@ -43,10 +43,6 @@ function sortStudents(students, sortBy = "name", order = "asc") {
   if (!Array.isArray(students)) throw new TypeError("Students must be an array");
   
   if (students.length === 0) throw new TypeError("Students array cannot be empty");
-  
-  if (sortBy !== "name" && sortBy !== "age" && sortBy !== "grade") {
-    throw new TypeError("sortBy must be either 'name', 'age' or 'grade'");
-  }
 
   const sortedArray = [...students];
 
